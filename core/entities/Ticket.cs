@@ -1,5 +1,7 @@
 namespace TicketSystem.Core.Entities;
 
+using TicketSystem.Core.States;
+
 public class Ticket
 /*
     Сущность "заявка" в системе управления задачами.
