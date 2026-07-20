@@ -21,15 +21,15 @@ public sealed class EmployeeManagementService : IEmployeeManagementService
     public Guid CreateEmployee(CreateEmployeeDto dto)
     {
         var employee = new Employee(Guid.NewGuid(), dto.FullName, dto.Department, dto.Position);
-        _employeeRepo.Add(employee); 
-        
+        _employeeRepo.Add(employee);
+
         return employee.Id;
     }
 
     public void UpdateEmployee(UpdateEmployeeDto dto)
     {
         // 1. Получаем сотрудника или выбрасываем специфичное исключение
-        var employee = _employeeRepo.GetById(dto.Id) 
+        var employee = _employeeRepo.GetById(dto.Id)
             ?? throw new EntityNotFoundException(nameof(Employee), dto.Id);
 
         // 2. Используем бизнес-методы сущности для изменения состояния

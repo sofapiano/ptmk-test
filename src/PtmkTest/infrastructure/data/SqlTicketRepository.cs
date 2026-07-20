@@ -32,8 +32,7 @@ public class SqlTicketRepository : ITicketRepository
             SET ExecutorId = EXCLUDED.ExecutorId,
                 Status = EXCLUDED.Status;";
 
-        // Маппим состояние в Enum для базы данных
-        TicketStatus status = ticket.TryStartWork() ? TicketStatus.InProgress : TicketStatus.New;
+        TicketStatus status = ticket.Status;
 
         db.Execute(sql, new
         {

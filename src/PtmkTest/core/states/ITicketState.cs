@@ -9,6 +9,8 @@ public interface ITicketState
     каждое состояние инкапсулирует логику переходов и действий, доступных в этом состоянии.
 */
 {
+    TicketStatus Status { get; }
+
     bool TryStartWork(Ticket ticket);
     bool TryComplete(Ticket ticket);
     bool TryAssignExecutor(Ticket ticket, Employee executor);

@@ -8,6 +8,8 @@ public sealed class InProgressState : ITicketState
     В этом состоянии заявка может быть завершена, но не может быть переведена обратно в состояние "Новая".
 */
 {
+    public TicketStatus Status => TicketStatus.InProgress;
+
     public bool TryStartWork(Ticket ticket)
     {
         return false;

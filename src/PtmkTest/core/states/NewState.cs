@@ -9,6 +9,8 @@ public sealed class NewState : ITicketState
     В этом состоянии заявка может быть переведена в состояние "В работе", но не может быть завершена напрямую.
 */
 {
+    public TicketStatus Status => TicketStatus.New;
+
     public bool TryStartWork(Ticket ticket)
     {
         ticket.ChangeState(new InProgressState());

@@ -53,6 +53,8 @@ public class Ticket
         };
     }
 
+    public TicketStatus Status => _state.Status;
+
     public void AssignExecutor(Employee executor)
     {
         Executor = executor ?? throw new ArgumentNullException(nameof(executor));

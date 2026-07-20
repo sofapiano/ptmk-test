@@ -8,6 +8,8 @@ public sealed class CompletedState : ITicketState
     В этом состоянии заявка не может быть переведена в другие состояния
 */
 {
+    public TicketStatus Status => TicketStatus.Completed;
+
     public bool TryStartWork(Ticket ticket)
     {
         return false;
