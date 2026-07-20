@@ -48,24 +48,60 @@ public class SqlTicketRepository : ITicketRepository
 
     public Ticket? GetById(Guid id)
     {
-        // В реальном проекте здесь будет JOIN с таблицей Employees, 
-        // затем вызов фабричного метода Ticket.Reconstruct()
-        throw new NotImplementedException("Реализация чтения с JOIN опущена для краткости");
+        using IDbConnection db = new NpgsqlConnection(_connectionString);
+
+        const string sql = @"
+            SELECT t.*, a.*, ex.*
+            FROM Tickets t
+            JOIN Employees a ON t.AuthorId = a.Id
+            LEFT JOIN Employees ex ON t.ExecutorId = ex.Id
+            WHERE t.Id = @Id";
+
+        var result = db.Query<TicketRow, Employee, Employee, Ticket>(
+            sql,
+            (row, author, executor) => Ticket.Reconstruct(
+                row.Id, row.Number, row.CreatedAt, row.Description, row.Deadline,
+                author, executor, ResolveState(row.Status)),
+            new { Id = id },
+            splitOn: "Id,Id");
+
+        return result.FirstOrDefault();
     }
 
+    private static ITicketState ResolveState(int status) => (TicketStatus)status switch
+    {
+        TicketStatus.New => new NewState(),
+        TicketStatus.InProgress => new InProgressState(),
+        TicketStatus.Completed => new CompletedState(),
+        _ => throw new InvalidOperationException($"Неизвестный статус заявки: {status}")
+    };
+
     public IReadOnlyCollection<Ticket> GetFiltered(
-        TicketStatus? status = null, Guid? executorId = null, string? department = null, bool onlyOverdue = false)
+    TicketStatus? status = null, Guid? executorId = null, string? department = null, bool onlyOverdue = false)
     {
         using IDbConnection db = new NpgsqlConnection(_connectionString);
         var builder = new SqlBuilder();
-        var template = builder.AddTemplate("SELECT * FROM Tickets t INNER JOIN Employees e ON t.ExecutorId = e.Id /**where**/");
+        var template = builder.AddTemplate(@"
+            SELECT t.*, a.*, ex.*
+            FROM Tickets t
+            JOIN Employees a ON t.AuthorId = a.Id
+            LEFT JOIN Employees ex ON t.ExecutorId = ex.Id
+            /**where**/
+            ORDER BY t.Deadline");
 
         if (status.HasValue) builder.Where("t.Status = @Status", new { Status = (int)status.Value });
         if (executorId.HasValue) builder.Where("t.ExecutorId = @ExecutorId", new { ExecutorId = executorId.Value });
-        if (!string.IsNullOrEmpty(department)) builder.Where("e.Department = @Department", new { Department = department });
+        if (!string.IsNullOrEmpty(department)) builder.Where("ex.Department = @Department", new { Department = department });
         if (onlyOverdue) builder.Where("t.Deadline < @Now", new { Now = DateTime.UtcNow });
 
-        // Возвращаем отфильтрованные данные (маппинг опущен для простоты)
-        return new List<Ticket>();
+        var tickets = db.Query<TicketRow, Employee, Employee, Ticket>(
+            template.RawSql,
+            (row, author, executor) => Ticket.Reconstruct(
+                row.Id, row.Number, row.CreatedAt, row.Description, row.Deadline,
+                author, executor, ResolveState(row.Status)),
+            template.Parameters,
+            splitOn: "Id,Id");
+
+        return tickets.ToList();
     }
 }
