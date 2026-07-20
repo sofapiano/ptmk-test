@@ -49,14 +49,14 @@ public class Ticket
     }
 
     // Бизнес-действия, делегируемые объекту состояния
-    public void StartWork()
+    public bool TryStartWork()
     {
-        _state.TryStartWork(this);
+        return _state.TryStartWork(this);
     }
 
-    public void Complete()
+    public bool TryComplete()
     {
-        _state.TryComplete(this);
+        return _state.TryComplete(this);
     }
 
     public bool IsOverdue(DateTime currentUtcTime)
