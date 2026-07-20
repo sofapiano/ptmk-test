@@ -3,6 +3,11 @@ namespace TicketSystem.Application.DTOs;
 using System;
 
 /// <summary>
+/// DTO для создания новой заявки.
+/// </summary>
+public record CreateTicketDto(string Description, DateTime Deadline, Guid AuthorId);
+
+/// <summary>
 /// Элемент отчёта, отражающий количество заявок в конкретном статусе.
 /// </summary>
 public record StatusReportItem(string StatusName, int Count);

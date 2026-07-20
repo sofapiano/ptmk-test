@@ -11,12 +11,12 @@ public class Ticket
 {
     public Guid Id { get; }
     public DateTime CreatedAt { get; }
-    
+
     public string Description { get; private set; }
     public DateTime Deadline { get; private set; }
     public Employee Author { get; }
     public Employee? Executor { get; private set; }
-    
+
     // внутреннее поле для хранения текущего состояния (паттерн State)
     private ITicketState _state;
 
@@ -24,7 +24,7 @@ public class Ticket
     {
         if (string.IsNullOrWhiteSpace(description))
             throw new ArgumentException("Описание заявки не может быть пустым", nameof(description));
-            
+
         if (deadline <= DateTime.UtcNow)
             throw new ArgumentException("Срок выполнения должен быть в будущем", nameof(deadline));
 
@@ -33,7 +33,7 @@ public class Ticket
         Description = description;
         Deadline = deadline;
         Author = author ?? throw new ArgumentNullException(nameof(author));
-        
+
         // По умолчанию новая заявка создается в состоянии "Новая"
         _state = new NewState();
     }
@@ -52,9 +52,9 @@ public class Ticket
 
     public bool TryAssignExecutor(Employee executor)
     {
-        if (executor == null) 
+        if (executor == null)
             throw new ArgumentNullException(nameof(executor));
-            
+
         return _state.TryAssignExecutor(this, executor);
     }
 

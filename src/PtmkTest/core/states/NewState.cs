@@ -22,7 +22,7 @@ public sealed class NewState : ITicketState
     }
     public bool TryAssignExecutor(Ticket ticket, Employee executor)
     {
-        ticket.InternalSetExecutor(executor); 
+        ticket.InternalSetExecutor(executor);
         return true;
     }
 }

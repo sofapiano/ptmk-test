@@ -1,5 +1,5 @@
 .txt
-/bin
-/obj
+**/bin
+**/obj
 .env
 .png

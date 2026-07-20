@@ -19,6 +19,6 @@ public sealed class CompletedState : ITicketState
     }
     public bool TryAssignExecutor(Ticket ticket, Employee executor)
     {
-        return false; 
+        return false;
     }
 }
