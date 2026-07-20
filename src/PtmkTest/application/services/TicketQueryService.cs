@@ -32,13 +32,6 @@ public sealed class TicketQueryService : ITicketQueryService
         return dtos;
     }
 
-    private static readonly Dictionary<TicketStatus, string> StatusNames = new()
-    {
-        [TicketStatus.New] = "Новая",
-        [TicketStatus.InProgress] = "В работе",
-        [TicketStatus.Completed] = "Выполнена"
-    };
-
     // Приватный метод для маппинга инкапсулирует логику преобразования
     private TicketListDto MapToDto(Ticket ticket)
     {
@@ -52,8 +45,8 @@ public sealed class TicketQueryService : ITicketQueryService
         Deadline: ticket.Deadline,
         AuthorFullName: ticket.Author.FullName,
         ExecutorFullName: ticket.Executor?.FullName,
-        StatusName: StatusNames[ticket.Status],
+        StatusName: TicketStatusNames.Get(ticket.Status),
         IsOverdue: ticket.IsOverdue(DateTime.UtcNow)
-    );
+        );
     }
 }
