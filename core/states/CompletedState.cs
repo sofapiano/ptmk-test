@@ -1,0 +1,20 @@
+namespace TicketSystem.Core.States;
+
+using TicketSystem.Core.Entities;
+
+public sealed class CompletedState : ITicketState
+/*
+    Состояние заявки "Выполнена"
+    В этом состоянии заявка не может быть переведена в другие состояния
+*/
+{
+    public bool TryStartWork(Ticket ticket)
+    {
+        return false;
+    }
+
+    public bool TryComplete(Ticket ticket)
+    {
+        return false;
+    }
+}
