@@ -1,6 +1,7 @@
 namespace TicketSystem.Application;
 
 using System;
+using TicketSystem.Application.Commands;
 using TicketSystem.Application.Contracts;
 using TicketSystem.Application.Exceptions;
 using TicketSystem.Core.Entities;

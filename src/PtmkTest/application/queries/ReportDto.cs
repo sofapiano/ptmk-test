@@ -1,11 +1,4 @@
-namespace TicketSystem.Application;
-
-using System;
-
-/// <summary>
-/// DTO для создания новой заявки.
-/// </summary>
-public record CreateTicketDto(string Description, DateTime Deadline, Guid AuthorId, Guid? ExecutorId = null);
+namespace TicketSystem.Application.Queries;
 
 /// <summary>
 /// Элемент отчёта, отражающий количество заявок в конкретном статусе.
@@ -18,7 +11,7 @@ public record StatusReportItem(string StatusName, int Count);
 public record ExecutorReportItem(Guid ExecutorId, string ExecutorFullName, int CompletedCount);
 
 /// <summary>
-/// Полный агрегированный отчёт по заявкам системы.
+/// Полный агрегированный отчёт по заявкам системы (Query).
 /// </summary>
 public record TicketSummaryReport(
     IReadOnlyCollection<StatusReportItem> StatusCounts,
