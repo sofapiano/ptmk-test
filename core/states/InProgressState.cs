@@ -18,4 +18,9 @@ public sealed class InProgressState : ITicketState
         ticket.ChangeState(new CompletedState());
         return true;
     }
+    public bool TryAssignExecutor(Ticket ticket, Employee executor)
+    {
+        ticket.InternalSetExecutor(executor); 
+        return true;
+    }
 }

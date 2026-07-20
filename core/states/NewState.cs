@@ -20,4 +20,9 @@ public sealed class NewState : ITicketState
         // напрямую завершить новую заявку нельзя по бизнес-требованиям
         return false;
     }
+    public bool TryAssignExecutor(Ticket ticket, Employee executor)
+    {
+        ticket.InternalSetExecutor(executor); 
+        return true;
+    }
 }

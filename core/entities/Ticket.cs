@@ -48,6 +48,22 @@ public class Ticket
         _state = newState ?? throw new ArgumentNullException(nameof(newState));
     }
 
+    public bool TryAssignExecutor(Employee executor)
+    {
+        if (executor == null) 
+            throw new ArgumentNullException(nameof(executor));
+            
+        return _state.TryAssignExecutor(this, executor);
+    }
+
+    // Вспомогательный метод, доступный ТОЛЬКО внутри нашего проекта/сборки.
+    // Это нужно, чтобы классы состояний (ITicketState) могли записать значение,
+    // но при этом внешний код (контроллеры, UI) не мог напрямую поменять исполнителя.
+    internal void InternalSetExecutor(Employee executor)
+    {
+        Executor = executor;
+    }
+
     // Бизнес-действия, делегируемые объекту состояния
     public bool TryStartWork()
     {

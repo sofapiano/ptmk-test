@@ -11,4 +11,5 @@ public interface ITicketState
 {
     bool TryStartWork(Ticket ticket);
     bool TryComplete(Ticket ticket);
+    bool TryAssignExecutor(Ticket ticket, Employee executor);
 }
