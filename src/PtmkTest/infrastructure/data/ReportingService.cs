@@ -20,7 +20,7 @@ public class ReportingService : IReportingService
     public async Task<TicketSummaryReport> GetSummaryReportAsync()
     {
         using IDbConnection db = new NpgsqlConnection(_connectionString);
-        
+
         // 1. Считаем статусы
         const string statusSql = @"
             SELECT Status as StatusName, COUNT(*) as Count 

@@ -1,4 +1,4 @@
-namespace TicketSystem.Application;
+namespace TicketSystem.Application.Services;
 
 using System;
 using TicketSystem.Application.Contracts;

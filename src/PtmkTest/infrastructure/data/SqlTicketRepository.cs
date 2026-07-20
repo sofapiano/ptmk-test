@@ -23,7 +23,7 @@ public class SqlTicketRepository : ITicketRepository
     public void Save(Ticket ticket)
     {
         using IDbConnection db = new NpgsqlConnection(_connectionString);
-        
+
         // Используем UPSERT (ON CONFLICT) для вставки или обновления
         const string sql = @"
             INSERT INTO Tickets (Id, CreatedAt, Description, Deadline, AuthorId, ExecutorId, Status)
@@ -35,7 +35,7 @@ public class SqlTicketRepository : ITicketRepository
         // Маппим состояние в Enum для базы данных
         TicketStatus status = ticket.TryStartWork() ? TicketStatus.InProgress : TicketStatus.New;
 
-        db.Execute(sql, new 
+        db.Execute(sql, new
         {
             ticket.Id,
             ticket.CreatedAt,
@@ -43,7 +43,7 @@ public class SqlTicketRepository : ITicketRepository
             ticket.Deadline,
             AuthorId = ticket.Author.Id,
             ExecutorId = ticket.Executor?.Id,
-            Status = (int)status 
+            Status = (int)status
         });
     }
 

@@ -1,4 +1,4 @@
-namespace TicketSystem.Application;
+namespace TicketSystem.Application.Services;
 
 using System;
 using TicketSystem.Application.Commands;
@@ -12,7 +12,7 @@ public sealed class TicketCreatorService : TicketOperationBase, ITicketCreator
     private readonly ITicketNumberGenerator _numberGenerator;
 
     public TicketCreatorService(
-        ITicketRepository ticketRepo, 
+        ITicketRepository ticketRepo,
         IEmployeeRepository employeeRepo,
         ITicketNumberGenerator numberGenerator)
         : base(ticketRepo)
