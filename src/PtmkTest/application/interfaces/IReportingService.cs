@@ -1,7 +1,6 @@
 namespace TicketSystem.Application.Contracts;
 
 using System.Threading.Tasks;
-using TicketSystem.Application.DTOs;
 
 public interface IReportingService
 /* 

@@ -2,8 +2,8 @@ namespace TicketSystem.Application.Contracts;
 
 using System;
 using System.Collections.Generic;
+using TicketSystem.Core;
 using TicketSystem.Core.Entities;
-using TicketSystem.Core.Enums;
 
 public interface ITicketRepository
 /*

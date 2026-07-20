@@ -1,7 +1,6 @@
 namespace TicketSystem.Application.Contracts;
 
 using System;
-using TicketSystem.Application.DTOs;
 using TicketSystem.Core.Entities;
 
 public interface ITicketManagementService

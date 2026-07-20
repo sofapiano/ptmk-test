@@ -1,11 +1,11 @@
-namespace TicketSystem.Application.DTOs;
+namespace TicketSystem.Application;
 
 using System;
 
 /// <summary>
 /// DTO для создания новой заявки.
 /// </summary>
-public record CreateTicketDto(string Description, DateTime Deadline, Guid AuthorId);
+public record CreateTicketDto(string Description, DateTime Deadline, Guid AuthorId, Guid? ExecutorId = null);
 
 /// <summary>
 /// Элемент отчёта, отражающий количество заявок в конкретном статусе.

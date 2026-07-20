@@ -1,4 +1,4 @@
-namespace TicketSystem.Core.Enums;
+namespace TicketSystem.Core;
 
 public enum TicketStatus
 /*
