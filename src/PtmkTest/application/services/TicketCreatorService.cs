@@ -9,11 +9,16 @@ using TicketSystem.Core.Entities;
 public sealed class TicketCreatorService : TicketOperationBase, ITicketCreator
 {
     private readonly IEmployeeRepository _employeeRepo;
+    private readonly ITicketNumberGenerator _numberGenerator;
 
-    public TicketCreatorService(ITicketRepository ticketRepo, IEmployeeRepository employeeRepo)
+    public TicketCreatorService(
+        ITicketRepository ticketRepo, 
+        IEmployeeRepository employeeRepo,
+        ITicketNumberGenerator numberGenerator)
         : base(ticketRepo)
     {
         _employeeRepo = employeeRepo ?? throw new ArgumentNullException(nameof(employeeRepo));
+        _numberGenerator = numberGenerator ?? throw new ArgumentNullException(nameof(numberGenerator));
     }
 
     public Ticket CreateTicket(CreateTicketDto dto)
@@ -24,7 +29,11 @@ public sealed class TicketCreatorService : TicketOperationBase, ITicketCreator
         var author = _employeeRepo.GetById(dto.AuthorId)
             ?? throw new EntityNotFoundException(nameof(Employee), dto.AuthorId);
 
-        var ticket = new Ticket(Guid.NewGuid(), dto.Description, dto.Deadline, author);
+        // Генерируем уникальный номер перед созданием доменного объекта
+        var ticketNumber = _numberGenerator.GenerateNext();
+
+        // Передаем сгенерированный номер в конструктор
+        var ticket = new Ticket(Guid.NewGuid(), ticketNumber, dto.Description, dto.Deadline, author);
 
         if (dto.ExecutorId is { } executorId)
         {

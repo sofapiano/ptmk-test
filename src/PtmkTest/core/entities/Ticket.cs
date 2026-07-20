@@ -10,6 +10,7 @@ public class Ticket
 */
 {
     public Guid Id { get; }
+    public string Number { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
     public string Description { get; private set; }
@@ -19,7 +20,7 @@ public class Ticket
 
     private ITicketState _state;
 
-    public Ticket(Guid id, string description, DateTime deadline, Employee author)
+    public Ticket(Guid id, string number, string description, DateTime deadline, Employee author)
     {
         if (string.IsNullOrWhiteSpace(description))
             throw new ArgumentException("Описание заявки не может быть пустым", nameof(description));
@@ -28,6 +29,7 @@ public class Ticket
             throw new ArgumentException("Срок выполнения должен быть в будущем", nameof(deadline));
 
         Id = id;
+        Number = number;
         CreatedAt = DateTime.UtcNow;
         Description = description;
         Deadline = deadline;
@@ -39,11 +41,11 @@ public class Ticket
     /// Фабричный метод восстановления заявки из хранилища (Bypass валидации конструктора).
     /// </summary>
     public static Ticket Reconstruct(
-        Guid id, DateTime createdAt, string description,
+        Guid id, string number, DateTime createdAt, string description,
         DateTime deadline, Employee author, Employee? executor,
         ITicketState state)
     {
-        return new Ticket(id, description, deadline, author)
+        return new Ticket(id, number, description, deadline, author)
         {
             CreatedAt = createdAt,
             Executor = executor,
