@@ -3,3 +3,6 @@
 **/obj
 .env
 .png
+architecture.txt
+architecture.png
+/.vscode

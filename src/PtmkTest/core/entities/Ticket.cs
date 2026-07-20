@@ -10,14 +10,13 @@ public class Ticket
 */
 {
     public Guid Id { get; }
-    public DateTime CreatedAt { get; }
+    public DateTime CreatedAt { get; private set; }
 
     public string Description { get; private set; }
     public DateTime Deadline { get; private set; }
     public Employee Author { get; }
     public Employee? Executor { get; private set; }
 
-    // внутреннее поле для хранения текущего состояния (паттерн State)
     private ITicketState _state;
 
     public Ticket(Guid id, string description, DateTime deadline, Employee author)
@@ -33,18 +32,30 @@ public class Ticket
         Description = description;
         Deadline = deadline;
         Author = author ?? throw new ArgumentNullException(nameof(author));
-
-        // По умолчанию новая заявка создается в состоянии "Новая"
         _state = new NewState();
     }
 
-    // Бизнес-метод назначения исполнителя
+    /// <summary>
+    /// Фабричный метод восстановления заявки из хранилища (Bypass валидации конструктора).
+    /// </summary>
+    public static Ticket Reconstruct(
+        Guid id, DateTime createdAt, string description,
+        DateTime deadline, Employee author, Employee? executor,
+        ITicketState state)
+    {
+        return new Ticket(id, description, deadline, author)
+        {
+            CreatedAt = createdAt,
+            Executor = executor,
+            _state = state
+        };
+    }
+
     public void AssignExecutor(Employee executor)
     {
         Executor = executor ?? throw new ArgumentNullException(nameof(executor));
     }
 
-    // Метод смены состояния, вызываемый из классов состояний (ITicketState)
     public void ChangeState(ITicketState newState)
     {
         _state = newState ?? throw new ArgumentNullException(nameof(newState));
@@ -58,15 +69,11 @@ public class Ticket
         return _state.TryAssignExecutor(this, executor);
     }
 
-    // Вспомогательный метод, доступный ТОЛЬКО внутри нашего проекта/сборки.
-    // Это нужно, чтобы классы состояний (ITicketState) могли записать значение,
-    // но при этом внешний код (контроллеры, UI) не мог напрямую поменять исполнителя.
     internal void InternalSetExecutor(Employee executor)
     {
         Executor = executor;
     }
 
-    // Бизнес-действия, делегируемые объекту состояния
     public bool TryStartWork()
     {
         return _state.TryStartWork(this);
