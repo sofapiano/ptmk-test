@@ -178,4 +178,8 @@ docker compose down
 Остановить и **полностью удалить БД** (в т.ч. чтобы seed-скрипты выполнились заново при следующем `up`):
 ```bash
 docker compose down -v
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> d5f68da4743fcc7ebeeb27ed822ef8e61d59833b
