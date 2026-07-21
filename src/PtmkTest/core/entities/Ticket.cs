@@ -20,37 +20,40 @@ public class Ticket
 
     private ITicketState _state;
 
-    public Ticket(Guid id, string number, string description, DateTime deadline, Employee author)
+    private Ticket(Guid id, string number, DateTime createdAt, string description,
+        DateTime deadline, Employee author)
     {
-        if (string.IsNullOrWhiteSpace(description))
-            throw new ArgumentException("Описание заявки не может быть пустым", nameof(description));
-
-        if (deadline <= DateTime.UtcNow)
-            throw new ArgumentException("Срок выполнения должен быть в будущем", nameof(deadline));
-
         Id = id;
         Number = number;
-        CreatedAt = DateTime.UtcNow;
+        CreatedAt = createdAt;
         Description = description;
         Deadline = deadline;
         Author = author ?? throw new ArgumentNullException(nameof(author));
         _state = new NewState();
     }
 
+    public Ticket(Guid id, string number, string description, DateTime deadline, Employee author)
+        : this(id, number, DateTime.UtcNow, description, deadline, author)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+            throw new ArgumentException("Описание заявки не может быть пустым", nameof(description));
+
+        if (deadline <= DateTime.UtcNow)
+            throw new ArgumentException("Срок выполнения должен быть в будущем", nameof(deadline));
+    }
+
     /// <summary>
-    /// Фабричный метод восстановления заявки из хранилища (Bypass валидации конструктора).
+    /// Фабричный метод восстановления заявки из хранилища (без валидации).
     /// </summary>
     public static Ticket Reconstruct(
         Guid id, string number, DateTime createdAt, string description,
         DateTime deadline, Employee author, Employee? executor,
         ITicketState state)
     {
-        return new Ticket(id, number, description, deadline, author)
-        {
-            CreatedAt = createdAt,
-            Executor = executor,
-            _state = state
-        };
+        var ticket = new Ticket(id, number, createdAt, description, deadline, author);
+        ticket.Executor = executor;
+        ticket._state = state;
+        return ticket;
     }
 
     public TicketStatus Status => _state.Status;

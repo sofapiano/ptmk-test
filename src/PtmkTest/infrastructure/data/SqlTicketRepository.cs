@@ -26,8 +26,8 @@ public class SqlTicketRepository : ITicketRepository
 
         // Используем UPSERT (ON CONFLICT) для вставки или обновления
         const string sql = @"
-            INSERT INTO Tickets (Id, CreatedAt, Description, Deadline, AuthorId, ExecutorId, Status)
-            VALUES (@Id, @CreatedAt, @Description, @Deadline, @AuthorId, @ExecutorId, @Status)
+            INSERT INTO Tickets (Id, Number, CreatedAt, Description, Deadline, AuthorId, ExecutorId, Status)
+            VALUES (@Id, @Number, @CreatedAt, @Description, @Deadline, @AuthorId, @ExecutorId, @Status)
             ON CONFLICT (Id) DO UPDATE 
             SET ExecutorId = EXCLUDED.ExecutorId,
                 Status = EXCLUDED.Status;";
@@ -37,6 +37,7 @@ public class SqlTicketRepository : ITicketRepository
         db.Execute(sql, new
         {
             ticket.Id,
+            ticket.Number,
             ticket.CreatedAt,
             ticket.Description,
             ticket.Deadline,

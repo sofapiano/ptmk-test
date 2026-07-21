@@ -42,6 +42,8 @@ public sealed class EmployeeManagementService : IEmployeeManagementService
         {
             employee.PromoteToPosition(dto.NewPosition);
         }
+
+        _employeeRepo.Update(employee);
     }
 
     public IReadOnlyCollection<EmployeeDto> GetAllEmployees()

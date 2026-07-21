@@ -69,6 +69,27 @@ public class SqlEmployeeRepository : IEmployeeRepository
         });
     }
 
+    public void Update(Employee employee)
+    {
+        if (employee is null)
+            throw new ArgumentNullException(nameof(employee));
+
+        using IDbConnection db = new NpgsqlConnection(_connectionString);
+
+        const string sql = @"
+            UPDATE Employees
+            SET FullName = @FullName, Department = @Department, Position = @Position
+            WHERE Id = @Id";
+
+        db.Execute(sql, new
+        {
+            employee.Id,
+            employee.FullName,
+            employee.Department,
+            employee.Position
+        });
+    }
+
     /// <summary>
     /// Служебная модель строки таблицы Employees для Dapper.
     /// </summary>

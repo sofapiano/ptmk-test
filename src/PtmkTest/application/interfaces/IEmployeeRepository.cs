@@ -14,4 +14,6 @@ public interface IEmployeeRepository
     IReadOnlyCollection<Employee> GetAll();
 
     void Add(Employee employee);
+
+    void Update(Employee employee);
 }
