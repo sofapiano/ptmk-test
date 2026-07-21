@@ -180,6 +180,3 @@ docker compose down
 docker compose down -v
 <<<<<<< HEAD
 ```
-=======
-```
->>>>>>> d5f68da4743fcc7ebeeb27ed822ef8e61d59833b
